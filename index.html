@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather</title>
+</head>
+<style>
+    * {
+        background-image: url('./climate.jpg');
+        background-blend-mode: lighten;
+        background-attachment: fixed;
+
+    }
+
+    h1 {
+        color: #fdfdff;
+        font-family: sans-serif;
+    }
+
+    #input {
+        padding: 2%;
+        border-radius: 15px;
+        font-size: 20px;
+    }
+
+    #btn {
+        padding: 1%;
+        border-radius: 15px;
+        background-color: #5a5ae2;
+        color: white;
+        font-family: sans-serif;
+        font-weight: bold;
+        font-size: 15px;
+    }
+</style>
+
+<body>
+    <center>
+        <h1>Weather App</h1>
+        <form id="form">
+            <input type="text" id="input" placeholder="Enter city" />
+            <button type="submit" id="btn">Submit</button>
+        </form>
+        <div id="cities">
+
+        </div>
+    </center>
+    <script>
+        // Declarations
+        const form = document.getElementById('form');
+        const input = document.getElementById('input');
+        const info = document.getElementById('cities');
+        const apiKey = '7a78fdc5b9ca1777c613a6e8de9e502f'
+        // to submit the data and checking if city is valid or not to display temperature
+        form.addEventListener('submit', (e) => {
+            e.preventDefault(); //inorder to hold submission behaviour
+            info.textContent = ''; //in cities no content is there
+            const inputValue = input.value;
+            // alert(inputValue);e.g:hyderabad
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${inputValue}&appid=${apiKey}&units=metric`;
+            fetch(url)
+                .then((res) => {
+                    console.log(res);
+                    return res.json();
+                })
+                .then((data) => {
+                    // let ob={
+                    //     name:'',
+                    //     temp:''      //object creation
+                    // }
+                    console.log(data);
+                    const { main, name } = data; //object creation instead of three lines we write in single line,because we are not given our details.May user give user own details.
+                    document.getElementById('cities').innerHTML = `<h1><p>City:${name}</p></h1>
+                <h1><p>Temperature is:${Math.round(main.temp)}<sup>o</sup></p></h1>`
+                })
+                .catch(() => {
+                    alert("please provide tha valid city name");
+                })
+            form.reset(); //after reset the Enter input page
+        })
+    </script>
+</body>
+
+</html>
